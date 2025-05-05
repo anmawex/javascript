@@ -1,0 +1,15 @@
+NOMBRAR VARIABLES
+✔ Usa camelCase para variables y funciones.
+✔ Nombres descriptivos y claros.
+✔ Usa prefijos (es, tiene, listaDe, total) para dar contexto.
+✔ Evita abreviaciones innecesarias.
+✔ Usa inglés para facilitar la colaboración.
+✔ Usa mayúsculas con _ para constantes globales.
+✔ Para funciones, usa verbos en infinitivo.
+
+SCOPE
+✔ Usa let y const en lugar de var.
+✔ Minimiza las variables globales para evitar conflictos.
+✔ Usa scope de función y bloque para encapsular variables.
+✔ Aprovecha el scope léxico para closures y programación funcional. <
+✔ Evita el hoisting inesperado con let y const.

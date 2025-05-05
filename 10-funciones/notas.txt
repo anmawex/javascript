@@ -1,0 +1,6 @@
+consejos:
+*Usa nombres descriptivos.
+*Mantén funciones cortas y enfocadas.
+*Evita efectos secundarios inesperados.
+*Usa const para funciones que no se redefinen.
+*Prefiere arrow functions para callbacks o cuando no necesitas this.

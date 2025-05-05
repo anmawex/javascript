@@ -1,0 +1,12 @@
+Extra: ¿Qué tienen en común estos tipos?
+Son primitivos → No son objetos.
+Son inmutables → No puedes cambiar su contenido directamente.
+
+Puedes obtener su tipo con typeof:
+typeof "hola"      // "string"
+typeof 42          // "number"
+typeof true        // "boolean"
+typeof undefined   // "undefined"
+typeof null        // "object"  ← (sí, un bug antiguo)
+typeof 10n         // "bigint"
+

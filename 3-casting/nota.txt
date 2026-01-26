@@ -1,3 +1,0 @@
-PARA NUMERO
-undefined es NaN como número, no 0.
-"0" y textos que solo contienen espacios como " " son true como boolean.

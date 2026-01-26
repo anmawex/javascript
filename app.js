@@ -30,10 +30,9 @@ class LearningPlatform {
                         title: 'Tu Primera Variable',
                         description: 'Declara una variable llamada "miNombre" y asígnale tu nombre.',
                         initialCode: '// Declara tu variable aquí\nlet miNombre = ',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return typeof miNombre !== 'undefined' && typeof miNombre === 'string';
+                                return typeof sandbox.miNombre !== 'undefined' && typeof sandbox.miNombre === 'string';
                             } catch (e) {
                                 return false;
                             }
@@ -45,10 +44,9 @@ class LearningPlatform {
                         title: 'Constantes',
                         description: 'Crea una constante llamada "PI" con el valor 3.14159.',
                         initialCode: '// Declara la constante aquí\nconst PI = ',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return PI === 3.14159;
+                                return sandbox.PI === 3.14159;
                             } catch (e) {
                                 return false;
                             }
@@ -67,10 +65,9 @@ class LearningPlatform {
                         title: 'Números y Cadenas',
                         description: 'Crea una variable "edad" con tu edad y "mensaje" con un saludo.',
                         initialCode: '// Crea las variables aquí\nlet edad = \nlet mensaje = ',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return typeof edad === 'number' && typeof mensaje === 'string';
+                                return typeof sandbox.edad === 'number' && typeof sandbox.mensaje === 'string';
                             } catch (e) {
                                 return false;
                             }
@@ -89,10 +86,9 @@ class LearningPlatform {
                         title: 'Conversión a Número',
                         description: 'Convierte la cadena "123" a número usando parseInt().',
                         initialCode: 'let texto = "123";\nlet numero = ',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return numero === 123 && typeof numero === 'number';
+                                return sandbox.numero === 123 && typeof sandbox.numero === 'number';
                             } catch (e) {
                                 return false;
                             }
@@ -111,10 +107,9 @@ class LearningPlatform {
                         title: 'Crear un Array',
                         description: 'Crea un array llamado "frutas" con 3 frutas diferentes.',
                         initialCode: '// Crea el array aquí\nlet frutas = ',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return Array.isArray(frutas) && frutas.length === 3;
+                                return Array.isArray(sandbox.frutas) && sandbox.frutas.length === 3;
                             } catch (e) {
                                 return false;
                             }
@@ -133,10 +128,9 @@ class LearningPlatform {
                         title: 'Comparación Igual',
                         description: 'Comprueba si 5 es igual a "5" usando == y ===.',
                         initialCode: 'let resultado1 = (5 == "5");\nlet resultado2 = (5 === "5");',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return resultado1 === true && resultado2 === false;
+                                return sandbox.resultado1 === true && sandbox.resultado2 === false;
                             } catch (e) {
                                 return false;
                             }
@@ -155,12 +149,18 @@ class LearningPlatform {
                         title: 'For Loop',
                         description: 'Usa un bucle for para mostrar los números del 1 al 5.',
                         initialCode: 'for (let i = 1; i <= 5; i++) {\n    // Tu código aquí\n}',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
                                 let output = [];
                                 const originalLog = console.log;
                                 console.log = (...args) => output.push(args.join(' '));
-                                eval(code);
+                                
+                                // Execute code in sandbox context
+                                const func = new Function('console', `
+                                    ${code}
+                                `);
+                                func({ log: console.log });
+                                
                                 console.log = originalLog;
                                 return output.length === 5 && output[0] === '1' && output[4] === '5';
                             } catch (e) {
@@ -181,14 +181,20 @@ class LearningPlatform {
                         title: 'If/Else',
                         description: 'Comprueba si un número es mayor que 10.',
                         initialCode: 'let numero = 15;\nif (numero > 10) {\n    // Tu código aquí\n}',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
                                 let result = false;
                                 const originalLog = console.log;
                                 console.log = (...args) => {
                                     if (args[0] === 'Es mayor que 10') result = true;
                                 };
-                                eval(code);
+                                
+                                // Execute code in sandbox context
+                                const func = new Function('console', `
+                                    ${code}
+                                `);
+                                func({ log: console.log });
+                                
                                 console.log = originalLog;
                                 return result;
                             } catch (e) {
@@ -209,14 +215,20 @@ class LearningPlatform {
                         title: 'Try/Catch',
                         description: 'Usa try/catch para manejar un posible error.',
                         initialCode: 'try {\n    let resultado = JSON.parse("texto inválido");\n} catch (error) {\n    // Tu código aquí\n}',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
                                 let caught = false;
                                 const originalLog = console.log;
                                 console.log = (...args) => {
                                     if (args[0].includes('Error')) caught = true;
                                 };
-                                eval(code);
+                                
+                                // Execute code in sandbox context
+                                const func = new Function('console', `
+                                    ${code}
+                                `);
+                                func({ log: console.log });
+                                
                                 console.log = originalLog;
                                 return caught;
                             } catch (e) {
@@ -237,10 +249,9 @@ class LearningPlatform {
                         title: 'Operadores Aritméticos',
                         description: 'Realiza operaciones matemáticas básicas.',
                         initialCode: 'let a = 10, b = 5;\nlet suma = a + b;\nlet resta = a - b;\nlet multiplicacion = a * b;\nlet division = a / b;',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return suma === 15 && resta === 5 && multiplicacion === 50 && division === 2;
+                                return sandbox.suma === 15 && sandbox.resta === 5 && sandbox.multiplicacion === 50 && sandbox.division === 2;
                             } catch (e) {
                                 return false;
                             }
@@ -259,10 +270,10 @@ class LearningPlatform {
                         title: 'Función Básica',
                         description: 'Crea una función que sume dos números.',
                         initialCode: 'function sumar(a, b) {\n    // Tu código aquí\n}',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return sumar(3, 4) === 7;
+                                const sumar = sandbox.sumar;
+                                return typeof sumar === 'function' && sumar(3, 4) === 7;
                             } catch (e) {
                                 return false;
                             }
@@ -321,10 +332,9 @@ class LearningPlatform {
                         title: 'Template Literals',
                         description: 'Usa template literals para crear un mensaje.',
                         initialCode: 'let nombre = "Juan";\nlet edad = 25;\nlet mensaje = ',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return mensaje.includes('Juan') && mensaje.includes('25') && mensaje.includes('`');
+                                return sandbox.mensaje.includes('Juan') && sandbox.mensaje.includes('25') && sandbox.mensaje.includes('`');
                             } catch (e) {
                                 return false;
                             }
@@ -343,10 +353,9 @@ class LearningPlatform {
                         title: 'Crear una Promesa',
                         description: 'Crea una promesa que se resuelva con "Hola Mundo".',
                         initialCode: 'let miPromesa = new Promise((resolve, reject) => {\n    // Tu código aquí\n});',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return miPromesa instanceof Promise;
+                                return sandbox.miPromesa instanceof Promise;
                             } catch (e) {
                                 return false;
                             }
@@ -365,9 +374,9 @@ class LearningPlatform {
                         title: 'Crear una Clase',
                         description: 'Crea una clase Persona con constructor.',
                         initialCode: 'class Persona {\n    constructor(nombre, edad) {\n        // Tu código aquí\n    }\n}',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
+                                const Persona = sandbox.Persona;
                                 const persona = new Persona("Juan", 25);
                                 return persona.nombre === "Juan" && persona.edad === 25;
                             } catch (e) {
@@ -388,13 +397,12 @@ class LearningPlatform {
                         title: 'Array.map()',
                         description: 'Usa map() para duplicar cada número en un array.',
                         initialCode: 'let numeros = [1, 2, 3, 4, 5];\nlet duplicados = numeros.map(numero => ',
-                        solution: (code) => {
+                        solution: (code, sandbox) => {
                             try {
-                                eval(code);
-                                return Array.isArray(duplicados) && 
-                                       duplicados.length === 5 && 
-                                       duplicados[0] === 2 && 
-                                       duplicados[4] === 10;
+                                return Array.isArray(sandbox.duplicados) && 
+                                       sandbox.duplicados.length === 5 && 
+                                       sandbox.duplicados[0] === 2 && 
+                                       sandbox.duplicados[4] === 10;
                             } catch (e) {
                                 return false;
                             }
@@ -548,7 +556,28 @@ class LearningPlatform {
         const testResultsContent = document.getElementById('testResultsContent');
         
         try {
-            const passed = this.currentChallenge.solution(code);
+            // Simple and direct approach
+            const variables = {};
+            
+            // Execute code in a controlled environment
+            const func = new Function(`
+                try {
+                    ${code}
+                    return {
+                        ${this.extractVariableNames(code)}
+                    };
+                } catch (e) {
+                    return { error: e.message };
+                }
+            `);
+            
+            const result = func();
+            
+            // Debug: show result
+            console.log('Test result:', result);
+            
+            // Run solution test with result
+            const passed = this.currentChallenge.solution(code, result);
             
             testResults.style.display = 'block';
             testResultsContent.innerHTML = `
@@ -557,6 +586,7 @@ class LearningPlatform {
                     <div>
                         <strong>${passed ? '¡Correcto!' : 'Intenta de nuevo'}</strong>
                         <p>${passed ? 'Has resuelto el reto correctamente' : 'Tu código no cumple con los requisitos'}</p>
+                        ${!passed ? '<p><small>💡 Revisa que estés declarando las variables con los nombres correctos</small></p>' : ''}
                     </div>
                 </div>
             `;
@@ -574,10 +604,29 @@ class LearningPlatform {
                     <div>
                         <strong>Error en la validación</strong>
                         <p>${error.message}</p>
+                        <p><small>💡 Asegúrate de completar el código correctamente</small></p>
                     </div>
                 </div>
             `;
         }
+    }
+
+    extractVariableNames(code) {
+        const variables = [];
+        
+        // Extract variable names from declarations
+        const letMatches = code.match(/let\s+(\w+)/g);
+        const constMatches = code.match(/const\s+(\w+)/g);
+        const varMatches = code.match(/var\s+(\w+)/g);
+        
+        [...(letMatches || []), ...(constMatches || []), ...(varMatches || [])].forEach(match => {
+            const varName = match.split(' ')[1];
+            if (!variables.includes(varName)) {
+                variables.push(varName);
+            }
+        });
+        
+        return variables.map(varName => `${varName}: typeof ${varName} !== 'undefined' ? ${varName} : undefined`).join(',\n                        ');
     }
 
     markChallengeCompleted() {

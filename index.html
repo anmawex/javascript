@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Learning Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🚀 JavaScript Learning Platform</h1>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <span class="progress-text" id="progressText">0% Completado</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar - Module Navigation -->
+            <aside class="sidebar">
+                <h2>Módulos</h2>
+                <nav class="module-nav" id="moduleNav">
+                    <!-- Modules will be loaded here -->
+                </nav>
+            </aside>
+
+            <!-- Learning Area -->
+            <section class="learning-area">
+                <!-- Module Info -->
+                <div class="module-info" id="moduleInfo">
+                    <h2 id="moduleTitle">Selecciona un módulo</h2>
+                    <p id="moduleDescription">Elige un módulo del menú lateral para comenzar a aprender</p>
+                </div>
+
+                <!-- Challenge Area -->
+                <div class="challenge-area" id="challengeArea" style="display: none;">
+                    <div class="challenge-header">
+                        <h3 id="challengeTitle">Reto Actual</h3>
+                        <div class="challenge-controls">
+                            <button id="runCode" class="btn btn-primary">▶ Ejecutar</button>
+                            <button id="resetCode" class="btn btn-secondary">↺ Reiniciar</button>
+                            <button id="showHint" class="btn btn-hint">💡 Pista</button>
+                        </div>
+                    </div>
+
+                    <!-- Challenge Description -->
+                    <div class="challenge-description" id="challengeDescription">
+                        <!-- Challenge content will be loaded here -->
+                    </div>
+
+                    <!-- Code Editor -->
+                    <div class="editor-container">
+                        <div class="editor-label">Tu Código:</div>
+                        <textarea id="codeEditor" class="code-editor"></textarea>
+                    </div>
+
+                    <!-- Console Output -->
+                    <div class="console-container">
+                        <div class="console-header">
+                            <span>📋 Consola</span>
+                            <button id="clearConsole" class="btn-small">Limpiar</button>
+                        </div>
+                        <div id="consoleOutput" class="console-output"></div>
+                    </div>
+
+                    <!-- Test Results -->
+                    <div class="test-results" id="testResults" style="display: none;">
+                        <h4>🧪 Resultados de Tests</h4>
+                        <div id="testResultsContent"></div>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage" style="display: none;">
+                    <h3>🎉 ¡Excelente!</h3>
+                    <p>Has completado este reto correctamente</p>
+                    <button id="nextChallenge" class="btn btn-primary">Siguiente Reto →</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

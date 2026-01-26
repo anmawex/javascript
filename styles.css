@@ -1,0 +1,476 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Header */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    color: #667eea;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.progress-bar {
+    position: relative;
+    width: 300px;
+    height: 25px;
+    background: #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 15px;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Main Layout */
+.main-content {
+    max-width: 1400px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+    padding: 0 2rem;
+}
+
+/* Sidebar */
+.sidebar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+    color: #667eea;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.module-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.module-item {
+    padding: 0.8rem 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    font-weight: 500;
+}
+
+.module-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.module-item.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-color: #667eea;
+}
+
+.module-item.completed {
+    background: #d4edda;
+    color: #155724;
+    border-color: #28a745;
+}
+
+.module-item .badge {
+    float: right;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+/* Learning Area */
+.learning-area {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.module-info {
+    text-align: center;
+    padding: 3rem;
+}
+
+.module-info h2 {
+    color: #667eea;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.module-info p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Challenge Area */
+.challenge-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.challenge-header h3 {
+    color: #667eea;
+    font-size: 1.5rem;
+}
+
+.challenge-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-hint {
+    background: #ffc107;
+    color: #212529;
+}
+
+.btn-hint:hover {
+    background: #e0a800;
+    transform: translateY(-2px);
+}
+
+.btn-small {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-small:hover {
+    background: #c82333;
+}
+
+/* Challenge Description */
+.challenge-description {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+}
+
+.challenge-description h4 {
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+.challenge-description p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Editor Container */
+.editor-container {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.editor-label {
+    background: #2d2d2d;
+    color: white;
+    padding: 0.8rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.CodeMirror {
+    height: 300px;
+    font-size: 16px;
+    border-radius: 0 0 10px 10px;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+}
+
+.CodeMirror-linenumber {
+    font-size: 12px;
+    color: #666;
+    min-width: auto;
+    width: auto;
+    padding-right: 0.3em;
+    text-align: right;
+}
+
+.CodeMirror-gutter {
+    min-width: 1.2em;
+    width: 1.2em;
+}
+
+.CodeMirror-lines {
+    padding-left: 0;
+}
+
+.CodeMirror-selected {
+    background: rgba(102, 126, 234, 0.2);
+}
+
+.CodeMirror-cursor {
+    border-left: 2px solid #fff;
+    width: 0;
+}
+
+/* Console */
+.console-container {
+    background: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.console-header {
+    background: #2d2d2d;
+    color: white;
+    padding: 0.8rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.console-output {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1rem;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    min-height: 150px;
+    max-height: 300px;
+    overflow-y: auto;
+    line-height: 1.4;
+}
+
+.console-log {
+    margin: 0.3rem 0;
+    padding: 0.2rem 0;
+}
+
+.console-error {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    padding: 0.3rem;
+    border-radius: 4px;
+    border-left: 3px solid #ff6b6b;
+}
+
+.console-success {
+    color: #51cf66;
+    background: rgba(81, 207, 102, 0.1);
+    padding: 0.3rem;
+    border-radius: 4px;
+    border-left: 3px solid #51cf66;
+}
+
+.console-info {
+    color: #74c0fc;
+}
+
+/* Test Results */
+.test-results {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 2px solid #e9ecef;
+}
+
+.test-results h4 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.test-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #e9ecef;
+}
+
+.test-pass {
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+.test-fail {
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+}
+
+.test-icon {
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+}
+
+/* Success Message */
+.success-message {
+    text-align: center;
+    padding: 3rem;
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    border-radius: 15px;
+    border: 2px solid #28a745;
+    color: #155724;
+}
+
+.success-message h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.success-message p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .sidebar {
+        position: static;
+        margin-bottom: 1rem;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .progress-bar {
+        width: 100%;
+    }
+    
+    .challenge-controls {
+        flex-wrap: wrap;
+    }
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.challenge-area {
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.btn-primary:active {
+    animation: pulse 0.3s ease;
+}

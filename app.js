@@ -428,16 +428,16 @@ class LearningPlatform {
             gutters: []
         });
 
-        // Auto-run on change (debounced)
-        let timeout;
-        this.editor.on('change', () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                if (this.currentChallenge) {
-                    this.runCode();
-                }
-            }, 1000);
-        });
+        // Remove auto-run on change - only run when button is clicked
+        // let timeout;
+        // this.editor.on('change', () => {
+        //     clearTimeout(timeout);
+        //     timeout = setTimeout(() => {
+        //         if (this.currentChallenge) {
+        //             this.runCode();
+        //         }
+        //     }, 1000);
+        // });
     }
 
     setupEventListeners() {
@@ -446,6 +446,13 @@ class LearningPlatform {
         document.getElementById('showHint').addEventListener('click', () => this.showHint());
         document.getElementById('clearConsole').addEventListener('click', () => this.clearConsole());
         document.getElementById('nextChallenge').addEventListener('click', () => this.nextChallenge());
+        
+        // Tab navigation
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
+        });
+        
+        document.getElementById('expandTheory').addEventListener('click', () => this.toggleTheoryExpansion());
     }
 
     renderModuleNavigation() {
@@ -488,13 +495,21 @@ class LearningPlatform {
         document.getElementById('moduleTitle').textContent = this.currentModule.title;
         document.getElementById('moduleDescription').textContent = this.currentModule.description;
         
+        // Load theory content
+        this.loadModuleTheory(moduleId);
+        
         // Start first challenge
         this.loadChallenge(0);
         
-        // Show challenge area
+        // Show challenge area and tab navigation
         document.getElementById('moduleInfo').style.display = 'none';
+        document.getElementById('tabNavigation').style.display = 'flex';
         document.getElementById('challengeArea').style.display = 'block';
+        document.getElementById('theoryArea').style.display = 'none';
         document.getElementById('successMessage').style.display = 'none';
+        
+        // Switch to challenge tab
+        this.switchTab('challenge');
     }
 
     loadChallenge(challengeIndex) {
@@ -541,11 +556,16 @@ class LearningPlatform {
             // Restore console.log
             console.log = originalLog;
             
+            // Show console output
+            if (output.length === 0) {
+                this.addToConsole('✅ Código ejecutado correctamente (sin salida)', 'success');
+            }
+            
             // Run tests
             this.runTests(code);
             
         } catch (error) {
-            this.addToConsole(`Error: ${error.message}`, 'error');
+            this.addToConsole(`❌ Error: ${error.message}`, 'error');
         }
     }
 
@@ -646,20 +666,54 @@ class LearningPlatform {
     showSuccess() {
         document.getElementById('challengeArea').style.display = 'none';
         document.getElementById('successMessage').style.display = 'block';
+        
+        // Check if there's a next challenge
+        const nextIndex = this.currentChallengeIndex + 1;
+        const hasNextChallenge = nextIndex < this.currentModule.challenges.length;
+        const hasNextModule = this.modules.findIndex(m => m.id === this.currentModule.id) < this.modules.length - 1;
+        
+        if (!hasNextChallenge && !hasNextModule) {
+            // Last challenge of all modules
+            document.getElementById('nextChallenge').textContent = '🎉 ¡Completado!';
+            document.getElementById('nextChallenge').disabled = true;
+        } else if (!hasNextChallenge && hasNextModule) {
+            // Last challenge of current module
+            document.getElementById('nextChallenge').textContent = 'Siguiente Módulo →';
+        }
     }
 
     nextChallenge() {
+        // Confirm before moving to next challenge
         const nextIndex = this.currentChallengeIndex + 1;
-        if (nextIndex < this.currentModule.challenges.length) {
-            this.loadChallenge(nextIndex);
-            document.getElementById('challengeArea').style.display = 'block';
-            document.getElementById('successMessage').style.display = 'none';
-        } else {
-            // Module completed, go to next module
+        const hasNextChallenge = nextIndex < this.currentModule.challenges.length;
+        const hasNextModule = this.modules.findIndex(m => m.id === this.currentModule.id) < this.modules.length - 1;
+        
+        let message = '';
+        if (hasNextChallenge) {
+            message = `¿Quieres pasar al siguiente ejercicio del módulo "${this.currentModule.title}"?`;
+        } else if (hasNextModule) {
             const currentModuleIndex = this.modules.findIndex(m => m.id === this.currentModule.id);
-            if (currentModuleIndex < this.modules.length - 1) {
-                this.selectModule(this.modules[currentModuleIndex + 1].id);
+            const nextModule = this.modules[currentModuleIndex + 1];
+            message = `¡Módulo "${this.currentModule.title}" completado! ¿Quieres pasar al siguiente módulo "${nextModule.title}"?`;
+        } else {
+            message = '¡Has completado todos los módulos! 🎉';
+        }
+        
+        if (hasNextChallenge || hasNextModule) {
+            if (confirm(message)) {
+                if (hasNextChallenge) {
+                    this.loadChallenge(nextIndex);
+                    document.getElementById('challengeArea').style.display = 'block';
+                    document.getElementById('successMessage').style.display = 'none';
+                } else {
+                    // Module completed, go to next module
+                    const currentModuleIndex = this.modules.findIndex(m => m.id === this.currentModule.id);
+                    this.selectModule(this.modules[currentModuleIndex + 1].id);
+                }
             }
+        } else {
+            // Last challenge of all modules - just show completion
+            alert('🎉 ¡Felicidades! Has completado todos los módulos de JavaScript');
         }
     }
 
@@ -721,3 +775,79 @@ class LearningPlatform {
 document.addEventListener('DOMContentLoaded', () => {
     new LearningPlatform();
 });
+
+// Tab switching and theory loading methods
+LearningPlatform.prototype.switchTab = function(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+    
+    // Show/hide corresponding areas
+    if (tabName === 'challenge') {
+        document.getElementById('challengeArea').style.display = 'flex';
+        document.getElementById('theoryArea').style.display = 'none';
+    } else if (tabName === 'theory') {
+        document.getElementById('challengeArea').style.display = 'none';
+        document.getElementById('theoryArea').style.display = 'flex';
+    }
+};
+
+LearningPlatform.prototype.loadModuleTheory = function(moduleId) {
+    const theoryContent = document.getElementById('theoryContent');
+    const theoryTitle = document.getElementById('theoryTitle');
+    
+    // Show loading state
+    theoryContent.innerHTML = '<p>Cargando documentación...</p>';
+    theoryTitle.textContent = `Documentación - ${this.currentModule.title}`;
+    
+    // Try to load README.md from the module folder
+    const readmePath = `${moduleId}/README.md`;
+    
+    fetch(readmePath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('README.md no encontrado');
+            }
+            return response.text();
+        })
+        .then(markdown => {
+            // Convert markdown to HTML
+            const html = marked.parse(markdown);
+            theoryContent.innerHTML = html;
+        })
+        .catch(error => {
+            // Fallback: show module description
+            theoryContent.innerHTML = `
+                <div class="theory-fallback">
+                    <h2>${this.currentModule.title}</h2>
+                    <p>${this.currentModule.description}</p>
+                    <br>
+                    <p><em>No se encontró archivo README.md para este módulo. La documentación detallada no está disponible.</em></p>
+                    <br>
+                    <h3>Contenido del Módulo</h3>
+                    <ul>
+                        ${this.currentModule.challenges.map(challenge => 
+                            `<li><strong>${challenge.title}</strong>: ${challenge.description}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `;
+        });
+};
+
+LearningPlatform.prototype.toggleTheoryExpansion = function() {
+    const theoryContent = document.getElementById('theoryContent');
+    const expandBtn = document.getElementById('expandTheory');
+    
+    if (theoryContent.style.maxHeight === 'none') {
+        theoryContent.style.maxHeight = '600px';
+        theoryContent.style.overflowY = 'auto';
+        expandBtn.textContent = '📖 Expandir';
+    } else {
+        theoryContent.style.maxHeight = 'none';
+        theoryContent.style.overflowY = 'visible';
+        expandBtn.textContent = '📖 Contraer';
+    }
+};

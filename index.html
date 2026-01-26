@@ -33,6 +33,12 @@
 
             <!-- Learning Area -->
             <section class="learning-area">
+                <!-- Tab Navigation -->
+                <div class="tab-navigation" id="tabNavigation">
+                    <button class="tab-btn active" data-tab="challenge">📝 Reto</button>
+                    <button class="tab-btn" data-tab="theory">📚 Teoría</button>
+                </div>
+
                 <!-- Module Info -->
                 <div class="module-info" id="moduleInfo">
                     <h2 id="moduleTitle">Selecciona un módulo</h2>
@@ -77,6 +83,19 @@
                     </div>
                 </div>
 
+                <!-- Theory Area -->
+                <div class="theory-area" id="theoryArea" style="display: none;">
+                    <div class="theory-header">
+                        <h3 id="theoryTitle">Documentación del Módulo</h3>
+                        <div class="theory-controls">
+                            <button id="expandTheory" class="btn btn-secondary">📖 Expandir</button>
+                        </div>
+                    </div>
+                    <div class="theory-content" id="theoryContent">
+                        <!-- Markdown content will be loaded here -->
+                    </div>
+                </div>
+
                 <!-- Success Message -->
                 <div class="success-message" id="successMessage" style="display: none;">
                     <h3>🎉 ¡Excelente!</h3>
@@ -92,6 +111,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

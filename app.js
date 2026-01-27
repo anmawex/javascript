@@ -993,7 +993,8 @@ class LearningPlatform {
                 this.markChallengeCompleted();
                 // Update navigation immediately after marking as completed
                 this.updateChallengeNavigation();
-                setTimeout(() => this.showSuccess(), 1000);
+                // Show success message immediately, don't wait for navigation
+                this.showSuccess();
             }
             
         } catch (error) {
@@ -1014,16 +1015,35 @@ class LearningPlatform {
     extractVariableNames(code) {
         const variables = [];
         
-        // Extract variable names from declarations
-        const letMatches = code.match(/let\s+(\w+)/g);
-        const constMatches = code.match(/const\s+(\w+)/g);
-        const varMatches = code.match(/var\s+(\w+)/g);
+        // Extract variable names from declarations - improved regex
+        // Handle multiple declarations in one line: let a = 1, b = 2, c = "test";
+        const letMatches = code.match(/let\s+([^;]+)/g);
+        const constMatches = code.match(/const\s+([^;]+)/g);
+        const varMatches = code.match(/var\s+([^;]+)/g);
         
-        [...(letMatches || []), ...(constMatches || []), ...(varMatches || [])].forEach(match => {
-            const varName = match.split(' ')[1];
-            if (!variables.includes(varName)) {
-                variables.push(varName);
-            }
+        const allMatches = [...(letMatches || []), ...(constMatches || []), ...(varMatches || [])];
+        
+        allMatches.forEach(match => {
+            // Extract the part after let/const/var
+            const declarationPart = match.replace(/^(let|const|var)\s+/, '');
+            
+            // Split by comma and extract variable names
+            const declarations = declarationPart.split(',');
+            
+            declarations.forEach(declaration => {
+                // Remove any assignment and trim
+                const varDeclaration = declaration.split('=')[0].trim();
+                
+                // Handle destructuring (skip for now) and get the variable name
+                if (varDeclaration && !varDeclaration.startsWith('{') && !varDeclaration.startsWith('[')) {
+                    // Remove any array/object access or function calls
+                    const cleanVarName = varDeclaration.split('.')[0].split('(')[0].trim();
+                    
+                    if (cleanVarName && !variables.includes(cleanVarName)) {
+                        variables.push(cleanVarName);
+                    }
+                }
+            });
         });
         
         return variables.map(varName => `${varName}: typeof ${varName} !== 'undefined' ? ${varName} : undefined`).join(',\n                        ');

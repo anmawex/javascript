@@ -899,8 +899,9 @@ class LearningPlatform {
             <p>${this.currentChallenge.description}</p>
         `;
         
-        // Set editor content
-        this.editor.setValue(this.currentChallenge.initialCode);
+        // Set editor content - only keep comments, remove code
+        const commentsOnly = this.extractComments(this.currentChallenge.initialCode);
+        this.editor.setValue(commentsOnly);
         
         // Clear console and results
         this.clearConsole();
@@ -1210,6 +1211,44 @@ LearningPlatform.prototype.showLockedMessage = function(challengeIndex) {
             modal.remove();
         }
     }, 3000);
+};
+
+LearningPlatform.prototype.extractComments = function(code) {
+    // Extract only comments from the initial code, removing actual code
+    const lines = code.split('\n');
+    const comments = [];
+    
+    lines.forEach(line => {
+        const trimmedLine = line.trim();
+        
+        // Keep single-line comments
+        if (trimmedLine.startsWith('//')) {
+            comments.push(line);
+        }
+        // Keep multi-line comment blocks
+        else if (trimmedLine.startsWith('/*') || trimmedLine.startsWith('*')) {
+            comments.push(line);
+        }
+        // Keep empty lines for formatting
+        else if (trimmedLine === '') {
+            comments.push('');
+        }
+        // Replace code lines with comment placeholders
+        else if (trimmedLine.includes('//')) {
+            // If line has both code and comment, extract just the comment part
+            const commentIndex = trimmedLine.indexOf('//');
+            const comment = trimmedLine.substring(commentIndex);
+            comments.push(comment);
+        }
+        // For pure code lines, add a placeholder comment
+        else {
+            // Add a placeholder comment to guide the student
+            const indent = line.match(/^\s*/)[0];
+            comments.push(`${indent}// Escribe tu código aquí`);
+        }
+    });
+    
+    return comments.join('\n');
 };
 
 LearningPlatform.prototype.showChallengePlaceholder = function() {

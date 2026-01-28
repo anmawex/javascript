@@ -1,4 +1,4 @@
-import { loadModules, getCurrentModule, setCurrentModule } from './moduleManager.js';
+import { modules } from './moduleConfig.js';
 import { setupEventListeners, handleEvent } from './eventHandler.js';
 import { renderModuleNavigation, updateProgressBar } from './uiUpdater.js';
 
@@ -9,8 +9,7 @@ class LearningPlatform {
         this.currentChallenge = null;
         this.editor = null;
         this.progress = this.loadProgress();
-        this.modules = loadModules();
-        
+        this.modules = modules;
         this.init();
     }
 
